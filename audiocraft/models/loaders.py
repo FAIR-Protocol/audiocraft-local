@@ -44,25 +44,9 @@ def _get_state_dict(
     device='cpu',
     cache_dir: tp.Optional[str] = None,
 ):
-    # Return the state dict either from a file or url
-    file_or_url_or_id = str(file_or_url_or_id)
-    assert isinstance(file_or_url_or_id, str)
 
-    if os.path.isfile(file_or_url_or_id):
-        return torch.load(file_or_url_or_id, map_location=device)
-
-    elif file_or_url_or_id.startswith('https://'):
-        return torch.hub.load_state_dict_from_url(file_or_url_or_id, map_location=device, check_hash=True)
-
-    elif file_or_url_or_id in HF_MODEL_CHECKPOINTS_MAP:
-        assert filename is not None, "filename needs to be defined if using HF checkpoints"
-
-        repo_id = HF_MODEL_CHECKPOINTS_MAP[file_or_url_or_id]
-        file = hf_hub_download(repo_id=repo_id, filename=filename, cache_dir=cache_dir)
-        return torch.load(file, map_location=device)
-
-    else:
-        raise ValueError(f"{file_or_url_or_id} is not a valid name, path or link that can be loaded.")
+    file = os.path.join('/tmp', filename)
+    return torch.load(file, map_location=device)
 
 
 def load_compression_model(file_or_url_or_id: tp.Union[Path, str], device='cpu', cache_dir: tp.Optional[str] = None):
