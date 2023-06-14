@@ -45,7 +45,7 @@ def _get_state_dict(
     cache_dir: tp.Optional[str] = None,
 ):
 
-    file = os.path.join('/tmp', filename)
+    file = os.path.join('/tmp/musicgen', filename)
     return torch.load(file, map_location=device)
 
 
